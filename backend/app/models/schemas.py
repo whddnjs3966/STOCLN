@@ -29,3 +29,16 @@ class StockAnalysisResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     version: str
+
+
+class TopPickItem(BaseModel):
+    stock_code: str
+    stock_name: str
+    total_score: float  # 0 ~ 100
+    price_change_pct: float
+    analyzed_at: str
+
+
+class TopPicksResponse(BaseModel):
+    items: list[TopPickItem]
+    generated_at: str
