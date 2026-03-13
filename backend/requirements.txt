@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+aiohttp
+openai
+yfinance
+redis
+celery
+python-dotenv
+pydantic
+pydantic-settings
+numpy
+pandas
+beautifulsoup4
+httpx
