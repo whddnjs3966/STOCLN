@@ -2,6 +2,7 @@
 
 interface StockHeaderProps {
   stockName: string;
+  stockNameSub: string;
   stockCode: string;
   market: string;
   currentPrice: number;
@@ -11,6 +12,7 @@ interface StockHeaderProps {
 
 export default function StockHeader({
   stockName,
+  stockNameSub,
   stockCode,
   market,
   currentPrice,
@@ -53,7 +55,10 @@ export default function StockHeader({
               {market}
             </span>
           </div>
-          <p className="mt-0.5 text-sm text-foreground/40">{stockCode}</p>
+          <p className="mt-0.5 text-sm text-foreground/40">
+            {stockCode}
+            {stockNameSub && <span className="ml-2 text-foreground/25">{stockNameSub}</span>}
+          </p>
         </div>
       </div>
 

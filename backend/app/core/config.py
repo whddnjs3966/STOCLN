@@ -5,6 +5,9 @@ class Settings(BaseSettings):
     # OpenAI
     openai_api_key: str = ""
 
+    # Google Gemini
+    gemini_api_key: str = ""
+
     # OpenDart
     opendart_api_key: str = ""
 

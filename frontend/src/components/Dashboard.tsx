@@ -8,6 +8,9 @@ import ScoreRadar from "./ScoreRadar";
 import ScoreBar from "./ScoreBar";
 import AISummary from "./AISummary";
 import NewsCard from "./NewsCard";
+import ScoreDetail from "./ScoreDetail";
+import PriceChart from "./PriceChart";
+import SentimentDetail from "./SentimentDetail";
 
 interface DashboardProps {
   data: StockAnalysis;
@@ -30,6 +33,7 @@ export default function Dashboard({ data }: DashboardProps) {
       {/* Top: Stock Header */}
       <StockHeader
         stockName={data.stock_name}
+        stockNameSub={data.stock_name_sub}
         stockCode={data.stock_code}
         market={data.market}
         currentPrice={data.current_price}
@@ -52,6 +56,15 @@ export default function Dashboard({ data }: DashboardProps) {
 
       {/* Score bars full width */}
       <ScoreBar scores={data.scores} />
+
+      {/* Price Chart */}
+      <PriceChart priceHistory={data.price_history} market={data.market} />
+
+      {/* Score detail metrics */}
+      <ScoreDetail details={data.score_details} market={data.market} />
+
+      {/* NLP Sentiment Detail */}
+      <SentimentDetail nlp={data.nlp_sentiment} />
 
       {/* Bottom row */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

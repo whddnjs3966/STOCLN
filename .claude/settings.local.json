@@ -1,24 +1,15 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cd \"D:/workplace/02-STOCLN\" && python --version && node --version && npm --version)",
-      "Bash(cd \"D:/workplace/02-STOCLN\" && npx create-next-app@latest frontend --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --no-turbopack 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN\" && echo \"N\" | npx create-next-app@latest frontend --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm --no-turbopack 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/frontend\" && npm install three @react-three/fiber @react-three/drei echarts echarts-for-react @supabase/supabase-js 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/frontend\" && npm install -D @types/three 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/backend\" && python -m venv venv && source venv/Scripts/activate && pip install -r requirements.txt 2>&1 | tail -5)",
-      "Bash(cd \"D:/workplace/02-STOCLN/backend\" && source venv/Scripts/activate && pip list 2>&1 | head -30)",
-      "Bash(cd \"D:/workplace/02-STOCLN/backend\" && source venv/Scripts/activate && pip install -r requirements.txt 2>&1 | tail -10)",
-      "Bash(cd \"D:/workplace/02-STOCLN/backend\" && source venv/Scripts/activate && python -c \"from app.main import app; print\\('FastAPI app loaded successfully'\\)\" 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/frontend\" && npx next lint 2>&1 | tail -5)",
-      "Bash(cd \"D:/workplace/02-STOCLN/frontend\" && npx next build 2>&1 | tail -15)",
-      "Bash(cd D:/workplace/02-STOCLN/backend && source venv/Scripts/activate && pip install pytest pytest-asyncio 2>&1 | tail -5)",
-      "Bash(cd D:/workplace/02-STOCLN/frontend && npx next build 2>&1 | tail -40)",
-      "Bash(cd D:/workplace/02-STOCLN/backend && source venv/Scripts/activate && python -m pytest tests/ -v 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/frontend\" && npx tsc --noEmit 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/backend\" && source venv/Scripts/activate && python -m pytest -v 2>&1)",
-      "Bash(cd \"D:/workplace/02-STOCLN/frontend\" && npm run build 2>&1 | tail -20)",
-      "Bash(cd \"D:/workplace/02-STOCLN/backend\" && source venv/Scripts/activate && python -c \"from app.main import app; print\\('FastAPI OK'\\)\")"
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Bash(curl -s http://localhost:3000 2>/dev/null | head -5 || echo \"Frontend not responding\")"
     ]
   }
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback, type KeyboardEvent } from "react";
-import { analyzeStock, type StockAnalysis } from "@/lib/api";
+import { useState, useCallback } from "react";
+import { analyzeStock, type StockAnalysis, type StockSuggestion } from "@/lib/api";
+import SearchAutocomplete from "./SearchAutocomplete";
 
 interface SearchBarProps {
   onResult: (data: StockAnalysis) => void;
@@ -21,37 +22,55 @@ export default function SearchBar({
   const [isSearching, setIsSearching] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSearch = useCallback(async () => {
-    if (!query.trim() || isSearching) return;
+  const triggerAnalysis = useCallback(
+    async (queryOverride?: string, marketOverride?: "KR" | "US") => {
+      const q = (queryOverride ?? query).trim();
+      const m = marketOverride ?? market;
 
-    setIsSearching(true);
-    setErrorMessage("");
-    onLoading(true);
+      if (!q || isSearching) return;
 
-    try {
-      const result = await analyzeStock(query.trim(), market);
-      onResult(result);
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.";
-      setErrorMessage(message);
-      onError(message);
-    } finally {
-      setIsSearching(false);
-      onLoading(false);
-    }
-  }, [query, market, isSearching, onResult, onLoading, onError]);
+      setIsSearching(true);
+      setErrorMessage("");
+      onLoading(true);
 
-  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
+      try {
+        const result = await analyzeStock(q, m);
+        onResult(result);
+      } catch (err) {
+        const message =
+          err instanceof Error ? err.message : "알 수 없는 오류가 발생했습니다.";
+        setErrorMessage(message);
+        onError(message);
+      } finally {
+        setIsSearching(false);
+        onLoading(false);
+      }
+    },
+    [query, market, isSearching, onResult, onLoading, onError]
+  );
+
+  // Called when the user clicks a suggestion from the dropdown
+  const handleSelect = useCallback(
+    (suggestion: StockSuggestion) => {
+      // Override market based on what the backend returned, falling back to
+      // the user's current toggle selection if the market is unrecognised.
+      const inferredMarket: "KR" | "US" =
+        suggestion.market === "NYSE" || suggestion.market === "NASDAQ"
+          ? "US"
+          : "KR";
+      setQuery(suggestion.name);
+      setMarket(inferredMarket);
+      triggerAnalysis(suggestion.name, inferredMarket);
+    },
+    [triggerAnalysis]
+  );
 
   return (
     <div className={`w-full ${compact ? "max-w-2xl" : "max-w-3xl"} mx-auto`}>
       <div
-        className={`relative flex items-center gap-3 rounded-2xl border border-cyan/20 bg-surface/80 backdrop-blur-xl ${compact ? "p-2 pl-4" : "p-3 pl-6"} transition-all duration-300 focus-within:border-cyan/50 focus-within:shadow-[0_0_30px_rgba(0,212,255,0.15)] hover:border-cyan/30`}
+        className={`relative flex items-center gap-3 rounded-2xl border border-cyan/20 bg-surface/80 backdrop-blur-xl ${
+          compact ? "p-2 pl-4" : "p-3 pl-6"
+        } transition-all duration-300 focus-within:border-cyan/50 focus-within:shadow-[0_0_30px_rgba(0,212,255,0.15)] hover:border-cyan/30`}
       >
         {/* Search icon */}
         <svg
@@ -68,14 +87,14 @@ export default function SearchBar({
           />
         </svg>
 
-        <input
-          type="text"
+        {/* Autocomplete input with dropdown */}
+        <SearchAutocomplete
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="종목명 또는 종목코드 입력 (예: 삼성전자, AAPL)"
-          className={`flex-1 bg-transparent ${compact ? "text-base" : "text-lg"} text-foreground placeholder-foreground/30 outline-none`}
+          onChange={setQuery}
+          onSelect={handleSelect}
+          onSubmit={() => triggerAnalysis()}
           disabled={isSearching}
+          compact={compact}
         />
 
         {/* Market toggle */}
@@ -104,9 +123,11 @@ export default function SearchBar({
 
         {/* Search button */}
         <button
-          onClick={handleSearch}
+          onClick={() => triggerAnalysis()}
           disabled={isSearching || !query.trim()}
-          className={`shrink-0 rounded-xl bg-cyan/90 ${compact ? "px-4 py-2" : "px-6 py-2.5"} font-semibold text-background transition-all hover:bg-cyan disabled:cursor-not-allowed disabled:opacity-40`}
+          className={`shrink-0 rounded-xl bg-cyan/90 ${
+            compact ? "px-4 py-2" : "px-6 py-2.5"
+          } font-semibold text-background transition-all hover:bg-cyan disabled:cursor-not-allowed disabled:opacity-40`}
         >
           {isSearching ? (
             <span className="flex items-center gap-2">
